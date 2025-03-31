@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Fruit : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class Fruit : MonoBehaviour
             ReplaceFruit(collision.gameObject);
         }
     }
+    /*void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.name=="Border"){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }*/
 
     void ReplaceFruit(GameObject other){
         Vector3 newPos = (other.transform.position+transform.position)*0.5f;

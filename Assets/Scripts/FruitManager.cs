@@ -13,6 +13,7 @@ public class FruitManager : MonoBehaviour
     private Camera cam;
     private FruitInfo incomingFruit;
     private FruitInfo currentFruit;
+    public GameObject nextFruit;
     void Awake()
     {
         instance=this;
@@ -20,6 +21,8 @@ public class FruitManager : MonoBehaviour
         dropperYPos = dropper.transform.position.y;
         currentFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
         incomingFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
+        nextFruit.GetComponent<SpriteRenderer>().color = incomingFruit.color;
+        nextFruit.transform.localScale = incomingFruit.size;
         StartCoroutine(drop());
     }
 
@@ -29,6 +32,8 @@ public class FruitManager : MonoBehaviour
         dropper.GetComponent<SpriteRenderer>().color=currentFruit.color;
         dropper.transform.localScale=currentFruit.size;
         incomingFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
+        nextFruit.GetComponent<SpriteRenderer>().color = incomingFruit.color;
+        nextFruit.transform.localScale = incomingFruit.size;
         bool dropped = false;
         yield return new WaitForSeconds(0.2f);
         while(!dropped){
