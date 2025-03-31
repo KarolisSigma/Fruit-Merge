@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 489756566453443841}
   - component: {fileID: 391916627889025875}
   m_Layer: 0
-  m_Name: Circle
-  m_TagString: Untagged
+  m_Name: Fruit
+  m_TagString: Fruit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.8742138, g: 0.38762298, b: 0.38762298, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,7 +96,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 7936956032854936320}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: dd53ca7a7dc1a8f468d9dcbb9f971133, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

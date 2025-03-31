@@ -15,10 +15,10 @@ public class Fruit : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.GetComponent<Fruit>()==null) return;
-        FruitInfo otherInfo=collision.gameObject.GetComponent<Fruit>().fruitInfo;
-        if(otherInfo==null) return;
-        if (otherInfo.fruitIndex == fruitInfo.fruitIndex && fruitInfo.fruitIndex<fruitcount-1){
+        if(!collision.gameObject.CompareTag("Fruit")) return;
+        //if(collision.gameObject.GetComponent<Fruit>()==null) return;
+        int index =collision.gameObject.GetComponent<Fruit>().fruitInfo.fruitIndex;
+        if (index == fruitInfo.fruitIndex && fruitInfo.fruitIndex<fruitcount-1){
             ReplaceFruit(collision.gameObject);
         }
     }
@@ -38,8 +38,15 @@ public class Fruit : MonoBehaviour
 
     public void SetInfo(FruitInfo info){
         fruitInfo = info;
-        GetComponent<SpriteRenderer>().color = fruitInfo.color;
+
+        GetComponent<SpriteRenderer>().sprite = fruitInfo.sprite;
+
+        CircleCollider2D circleCollider2D= GetComponent<CircleCollider2D>();
+        circleCollider2D.offset = fruitInfo.circleColliderOffset;
+        circleCollider2D.radius=fruitInfo.radius;
+
         transform.localScale = fruitInfo.size;
+
         ScoreManager.instance.UpdateScore(info.scoreAmount);
     }
 }
@@ -47,7 +54,9 @@ public class Fruit : MonoBehaviour
 [Serializable]
 public class FruitInfo{
     public Vector2 size;
-    public Color color;
+    public Sprite sprite;
+    public Vector2 circleColliderOffset;
+    public float radius;
     public int fruitIndex;
     public int scoreAmount;
 }
