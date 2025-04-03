@@ -15,15 +15,16 @@ public class FruitManager : MonoBehaviour
     private FruitInfo currentFruit;
     public GameObject nextFruit;
     private Vector2 clampDropperPos;
+    public ParticleSystem click;
     void Awake()
     {
         instance=this;
         cam = Camera.main;
         dropperYPos = dropper.transform.position.y;
-        currentFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
-        incomingFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
+        currentFruit = fruitInfos[Random.Range(0, 4)];
+        incomingFruit = fruitInfos[Random.Range(0, 4)];
         //nextFruit.GetComponent<SpriteRenderer>().color = incomingFruit.color;
-        nextFruit.transform.localScale = incomingFruit.size;
+        nextFruit.transform.localScale = Vector2.one*incomingFruit.diameter;
         StartCoroutine(drop());
     }
 
@@ -32,14 +33,14 @@ public class FruitManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         dropper.SetActive(true);
         currentFruit=incomingFruit;
-        incomingFruit = fruitInfos[Random.Range(0, fruitInfos.Count-4)];
+        incomingFruit = fruitInfos[Random.Range(0, 4)];
 
         dropper.GetComponent<SpriteRenderer>().sprite=currentFruit.sprite;
-        dropper.transform.localScale=currentFruit.size;
+        dropper.transform.localScale=Vector2.one*currentFruit.diameter;
         nextFruit.GetComponent<SpriteRenderer>().sprite = incomingFruit.sprite;
 
-        clampDropperPos = new Vector2(-2.8f+currentFruit.size.x/2f, 2.8f-currentFruit.size.x/2);
-        //nextFruit.transform.localScale = incomingFruit.size;
+        clampDropperPos = new Vector2(-2.8f+currentFruit.diameter/2f, 2.8f-currentFruit.diameter/2);
+
         bool dropped = false;
         while(!dropped){
             Vector2 pos=Vector2.zero;
@@ -48,6 +49,10 @@ public class FruitManager : MonoBehaviour
             dropper.transform.position = pos;
             
             if(Input.GetKeyUp(KeyCode.Mouse0)){
+                Vector2 clickpos = cam.ScreenToWorldPoint(Input.mousePosition);
+                click.transform.position = clickpos;
+                click.Emit(1);
+                AudioManager.instance.PlayPop();
                 Spawn(dropper.transform.position);
                 dropped=true;
             }

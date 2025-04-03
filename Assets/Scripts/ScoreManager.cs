@@ -13,6 +13,7 @@ public class ScoreManager : MonoBehaviour
     void Awake()
     {
         if (instance == null) instance=this;
+        Application.targetFrameRate = 60;
     }
 
     public void UpdateScore(int amount){

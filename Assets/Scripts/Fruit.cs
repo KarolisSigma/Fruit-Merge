@@ -16,20 +16,17 @@ public class Fruit : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(!collision.gameObject.CompareTag("Fruit")) return;
-        //if(collision.gameObject.GetComponent<Fruit>()==null) return;
         int index =collision.gameObject.GetComponent<Fruit>().fruitInfo.fruitIndex;
         if (index == fruitInfo.fruitIndex && fruitInfo.fruitIndex<fruitcount-1){
             ReplaceFruit(collision.gameObject);
         }
     }
-    /*void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.name=="Border"){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }*/
 
     void ReplaceFruit(GameObject other){
+        AudioManager.instance.PlayMerge();
+
+        ScoreManager.instance.UpdateScore(fruitInfo.scoreAmount);
+
         Vector3 newPos = (other.transform.position+transform.position)*0.5f;
         Destroy(other.gameObject);
         transform.position = newPos;
@@ -40,23 +37,23 @@ public class Fruit : MonoBehaviour
         fruitInfo = info;
 
         GetComponent<SpriteRenderer>().sprite = fruitInfo.sprite;
-
+        
+        GetComponent<Rigidbody2D>().mass = Mathf.Pow(info.diameter/2f, 2)*Mathf.PI;
+        
         CircleCollider2D circleCollider2D= GetComponent<CircleCollider2D>();
         circleCollider2D.offset = fruitInfo.circleColliderOffset;
-        circleCollider2D.radius=fruitInfo.radius;
+        circleCollider2D.radius=fruitInfo.colliderRadius;
 
-        transform.localScale = fruitInfo.size;
-
-        ScoreManager.instance.UpdateScore(info.scoreAmount);
+        transform.localScale = Vector2.one*info.diameter;
     }
 }
 
 [Serializable]
 public class FruitInfo{
-    public Vector2 size;
+    public float diameter;
     public Sprite sprite;
     public Vector2 circleColliderOffset;
-    public float radius;
+    public float colliderRadius;
     public int fruitIndex;
     public int scoreAmount;
 }
