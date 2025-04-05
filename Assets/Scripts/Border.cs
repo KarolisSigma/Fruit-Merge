@@ -40,7 +40,7 @@ public class Border : MonoBehaviour
     IEnumerator Waiter(GameObject fruit){
         yield return new WaitForSeconds(timeInContact);
         if(fruit!=null){
-            print("End game");
+            UIManager.instance.GameOver(true);
         }
     }
 

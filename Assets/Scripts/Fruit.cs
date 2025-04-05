@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class Fruit : MonoBehaviour
 {
-    private FruitInfo fruitInfo;
+    public FruitInfo fruitInfo;
     private int fruitcount;
     void Awake()
     {
@@ -24,13 +25,17 @@ public class Fruit : MonoBehaviour
 
     void ReplaceFruit(GameObject other){
         AudioManager.instance.PlayMerge();
+        float diameter = 0.5f;
+        FruitInfo newInfo =FruitManager.instance.fruitInfos[fruitInfo.fruitIndex+1];
+        diameter = newInfo.diameter;
+        Vector3 newPos = (other.transform.position+transform.position)*0.5f;
+        FruitManager.instance.MergeEffect(newPos, diameter, fruitInfo.particleColor, newInfo.particleColor);
 
         ScoreManager.instance.UpdateScore(fruitInfo.scoreAmount);
 
-        Vector3 newPos = (other.transform.position+transform.position)*0.5f;
         Destroy(other.gameObject);
         transform.position = newPos;
-        SetInfo(FruitManager.instance.fruitInfos[fruitInfo.fruitIndex+1]);
+        SetInfo(newInfo);
     }
 
     public void SetInfo(FruitInfo info){
@@ -52,6 +57,7 @@ public class Fruit : MonoBehaviour
 public class FruitInfo{
     public float diameter;
     public Sprite sprite;
+    public Color particleColor;
     public Vector2 circleColliderOffset;
     public float colliderRadius;
     public int fruitIndex;

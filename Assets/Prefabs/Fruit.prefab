@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3039957198734629923}
   - component: {fileID: 489756566453443841}
   - component: {fileID: 391916627889025875}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fruit
   m_TagString: Fruit
   m_Icon: {fileID: 0}
@@ -161,3 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc5e3b3ca526c54d842881a18db3f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fruitInfo:
+    diameter: 0
+    sprite: {fileID: 0}
+    particleColor: {r: 0, g: 0, b: 0, a: 0}
+    circleColliderOffset: {x: 0, y: 0}
+    colliderRadius: 0
+    fruitIndex: 0
+    scoreAmount: 0

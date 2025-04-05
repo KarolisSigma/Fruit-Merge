@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class FruitManager : MonoBehaviour
 {
@@ -13,36 +13,56 @@ public class FruitManager : MonoBehaviour
     private Camera cam;
     private FruitInfo incomingFruit;
     private FruitInfo currentFruit;
-    public GameObject nextFruit;
+    public Image nextFruit;
     private Vector2 clampDropperPos;
     public ParticleSystem click;
+    public ParticleSystem mergeEffect;
+    public bool isPlaying;
+
+    public void MergeEffect(Vector3 pos, float diameter, Color color, Color color2){
+        mergeEffect.transform.position = pos;
+        ParticleSystem.EmitParams emitParams = new ParticleSystem.EmitParams();
+        emitParams.startSize = diameter;
+        emitParams.startColor = color;
+        mergeEffect.Emit(emitParams, 3);
+        emitParams.startColor = color2;
+        emitParams.rotation = 30;
+        mergeEffect.Emit(emitParams, 3);
+    }
     void Awake()
     {
         instance=this;
         cam = Camera.main;
         dropperYPos = dropper.transform.position.y;
-        currentFruit = fruitInfos[Random.Range(0, 4)];
-        incomingFruit = fruitInfos[Random.Range(0, 4)];
-        //nextFruit.GetComponent<SpriteRenderer>().color = incomingFruit.color;
-        nextFruit.transform.localScale = Vector2.one*incomingFruit.diameter;
+        currentFruit = fruitInfos[Random.Range(0, 7)];
+        incomingFruit = fruitInfos[Random.Range(0, 7)];
         StartCoroutine(drop());
     }
 
 
     IEnumerator drop(){
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         dropper.SetActive(true);
         currentFruit=incomingFruit;
-        incomingFruit = fruitInfos[Random.Range(0, 4)];
+        incomingFruit = fruitInfos[Random.Range(0, 7)];
 
         dropper.GetComponent<SpriteRenderer>().sprite=currentFruit.sprite;
         dropper.transform.localScale=Vector2.one*currentFruit.diameter;
-        nextFruit.GetComponent<SpriteRenderer>().sprite = incomingFruit.sprite;
+        nextFruit.sprite = incomingFruit.sprite;
 
         clampDropperPos = new Vector2(-2.8f+currentFruit.diameter/2f, 2.8f-currentFruit.diameter/2);
 
         bool dropped = false;
+        bool registerClick=true;
         while(!dropped){
+
+            if(!isPlaying){
+                registerClick=false;
+                yield return null;
+                continue;
+            }
+            if(!registerClick) yield return null;
+
             Vector2 pos=Vector2.zero;
             pos.x = Mathf.Clamp(cam.ScreenToWorldPoint(Input.mousePosition).x, clampDropperPos.x, clampDropperPos.y);
             pos.y = dropperYPos;
@@ -56,6 +76,7 @@ public class FruitManager : MonoBehaviour
                 Spawn(dropper.transform.position);
                 dropped=true;
             }
+            registerClick=true;
             yield return null;
         }
         dropper.SetActive(false);
